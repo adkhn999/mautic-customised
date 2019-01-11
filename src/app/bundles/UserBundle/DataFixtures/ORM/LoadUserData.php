@@ -22,48 +22,48 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class LoadUserData.
  */
 class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
-{{
+{
     /**
      * @var ContainerInterface
      */
     private $container;
 
     /**
-     * {{@inheritdoc}}
+     * {@inheritdoc}
      */
     public function setContainer(ContainerInterface $container = null)
-    {{
+    {
         $this->container = $container;
-    }}
+    }
 
     /**
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
-    {{
+    {
         $user = new User();
-        $user->setFirstName('{0}');
-        $user->setLastName('{1}');
-        $user->setUsername('{2}');
-        $user->setEmail('{3}');
+        $user->setFirstName('{{firstname}}');
+        $user->setLastName('{{lastname}}');
+        $user->setUsername('{{username}}');
+        $user->setEmail('{{email}}');
         $encoder = $this->container
             ->get('security.encoder_factory')
             ->getEncoder($user)
         ;
-        $user->setPassword($encoder->encodePassword('{4}', $user->getSalt()));
+        $user->setPassword($encoder->encodePassword('{{password}}', $user->getSalt()));
         $user->setRole($this->getReference('admin-role'));
         $manager->persist($user);
         $manager->flush();
 
         $this->addReference('admin-user', $user);
 
-    }}
+    }
 
     /**
-     * {{@inheritdoc}}
+     * {@inheritdoc}
      */
     public function getOrder()
-    {{
+    {
         return 2;
-    }}
-}}
+    }
+}
